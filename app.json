@@ -36,6 +36,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "45d860d0-40b5-48f6-bb98-bc2125fae572"
+      }
+    },
+    "owner": "mtorres93"
   }
 }
