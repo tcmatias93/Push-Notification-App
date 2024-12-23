@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
+import { router } from "expo-router";
 
 //Se configura si se quiere recibir notificacione de la app esta terminada o en el bacground
 Notifications.setNotificationHandler({
@@ -118,17 +119,24 @@ export const usePushNotifications = () => {
     if (areListenerReady) return;
 
     areListenerReady = true;
+
     notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) =>
+      Notifications.addNotificationReceivedListener((notification) => {
         setNotifications((prevNotifications) => [
           notification,
           ...prevNotifications,
-        ])
-      );
+        ]);
+      });
 
-    responseListener.current = Notifications.addNotificationReceivedListener(
-      (response) => console.log(response)
-    );
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        //console.log(JSON.stringify(response, null, 2))
+        const { chatId } = response.notification.request.content.data;
+
+        if (chatId) {
+          router.push(`/chat/${chatId}`);
+        }
+      });
 
     return () => {
       notificationListener.current &&
